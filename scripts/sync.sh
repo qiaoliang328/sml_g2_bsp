@@ -126,14 +126,14 @@ CURRENT_DIR="$(pwd)"
 
 # 定义需要同步的目录对
 # 注意：这里使用了相对路径，根据实际情况可能需要调整
-SOURCE_BUILD="$CURRENT_DIR/sm3_81_bsp/build/boards/cv184x/cv1842cp_sm3_81_spinand"
-TARGET_BUILD="$CURRENT_DIR/build/boards/cv184x/cv1842cp_sm3_81_spinand"
+SOURCE_BUILD="$CURRENT_DIR/sml_g2_bsp/build/boards/cv184x/cv1841cp_sml_g2_spinor"
+TARGET_BUILD="$CURRENT_DIR/build/boards/cv184x/cv1841cp_sml_g2_spinor"
 
-SOURCE_ALIOS="$CURRENT_DIR/sm3_81_bsp/cvi_alios/solutions/normboot/customization/cv1842cp_sm3_81_spinand"
-TARGET_ALIOS="$CURRENT_DIR/cvi_alios/solutions/normboot/customization/cv1842cp_sm3_81_spinand"
+SOURCE_ALIOS="$CURRENT_DIR/sml_g2_bsp/cvi_alios/solutions/normboot/customization/cv1841cp_sml_g2_spinor"
+TARGET_ALIOS="$CURRENT_DIR/cvi_alios/solutions/normboot/customization/cv1841cp_sml_g2_spinor"
 
-SOURCE_RAMDISK="$CURRENT_DIR/sm3_81_bsp/ramdisk/rootfs/overlay/cv1842cp_sm3_81_spinand"
-TARGET_RAMDISK="$CURRENT_DIR/ramdisk/rootfs/overlay/cv1842cp_sm3_81_spinand"
+SOURCE_RAMDISK="$CURRENT_DIR/sml_g2_bsp/ramdisk/rootfs/overlay/cv1841cp_sml_g2_spinor"
+TARGET_RAMDISK="$CURRENT_DIR/ramdisk/rootfs/overlay/cv1841cp_sml_g2_spinor"
 
 # 根据模式执行操作
 if [ "$CHECK_MODE" = "true" ]; then

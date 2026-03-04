@@ -40,7 +40,7 @@ void PLATFORM_SpkMute(int value)
 	}
 	run_once = 1;
 
-#if defined(CONFIG_CHIP_cv1841c) || defined(CONFIG_CHIP_cv1842cp)
+#if defined(CONFIG_CHIP_cv1841cp) || defined(CONFIG_CHIP_cv1842cp)
 	gpio_spken_r_grp = 4;
 	gpio_spken_r_num = 2;
 #endif
@@ -67,7 +67,7 @@ void PLATFORM_SpkMute(int value)
 static void _AudioPinmux(void)
 {
 
-#if defined(CONFIG_CHIP_cv1841c) || defined(CONFIG_CHIP_cv1842cp)
+#if defined(CONFIG_CHIP_cv1841cp) || defined(CONFIG_CHIP_cv1842cp)
     PINMUX_CONFIG(PWR_GPIO2, PWR_GPIO_2);
 #endif
 #if defined(CONFIG_CHIP_cv1842hp) || defined(CONFIG_CHIP_cv1843hp) || defined(CONFIG_CHIP_cv1841h)

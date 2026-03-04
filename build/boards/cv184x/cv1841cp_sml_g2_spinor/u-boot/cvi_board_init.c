@@ -30,9 +30,9 @@ int cvi_board_init(void)
         PINMUX_CONFIG(PWR_WAKEUP0, PWR_GPIO_6);         /* power source */
         PINMUX_CONFIG(SPK_EN, XGPIOA_15);               /* 4G_RESET_N */
 
-        /* tp */
-        PINMUX_CONFIG(IIC0_SCL, CV_SCL0__CR_4WTDI);
-        PINMUX_CONFIG(IIC0_SDA, CV_SDA0__CR_4WTDO);
+        /* tp */  // ql del for alios debug uart
+        //PINMUX_CONFIG(IIC0_SCL, CV_SCL0__CR_4WTDI);
+        //PINMUX_CONFIG(IIC0_SDA, CV_SDA0__CR_4WTDO);
         PINMUX_CONFIG(SD0_PWR_EN, XGPIOA_14);           /* INT */
         PINMUX_CONFIG(AUX0, XGPIOA_30);                 /* RST */
         /* change debug i2c to i2c4, so can use i2c0 */
