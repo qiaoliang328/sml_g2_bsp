@@ -10,11 +10,18 @@
 #include "cvi_mipi_tx.h"
 #include "board_config.h"
 
-#if CONFIG_PANEL_ST7703
+#if (CONFIG_PANEL_ST7703 == 1)
 #undef PANEL_WIDTH
 #undef PANEL_HEIGHT
 #define PANEL_WIDTH 640
 #define PANEL_HEIGHT 480
+#define MY_enIntfSync     VO_OUTPUT_640x480_60
+#elif (CONFIG_PANEL_ST7701_480x640 == 1)
+#undef PANEL_WIDTH
+#undef PANEL_HEIGHT
+#define PANEL_WIDTH 480
+#define PANEL_HEIGHT 640
+#define MY_enIntfSync     VO_OUTPUT_480x640_60
 #endif
 
 PARAM_CLASSDEFINE(VO_CHN_ATTR_S,VOCHN,VO,CHN)[] = {
@@ -29,7 +36,7 @@ PARAM_CLASSDEFINE(PARAM_VODEV_S,VOCFG,CTX,VO)[] = {
             .VoDev  = 0,
             .u32DisBufLen  = 3,
             .stVoPubAttr.enIntfType  = VO_INTF_MIPI,
-            .stVoPubAttr.enIntfSync  = VO_OUTPUT_640x480_60,
+            .stVoPubAttr.enIntfSync  = MY_enIntfSync,  // VO_OUTPUT_640x480_60,
             .stVoPubAttr.u32BgColor = COLOR_10_RGB_BLACK,
             .stDispRect = {0, 0, PANEL_WIDTH, PANEL_HEIGHT},
             .stImageSize = {PANEL_WIDTH, PANEL_HEIGHT},
@@ -59,7 +66,7 @@ PARAM_CLASSDEFINE(PARAM_VODEV_S,VOCFG,CTX,VO)[] = {
 };
 
 PARAM_VO_CFG_S g_stVoCtx = {
-#if (CONFIG_PANEL_HX8394 == 1 || CONFIG_PANEL_ILI9488 == 1 || CONFIG_PANEL_ST7703 == 1)
+#if (CONFIG_PANEL_HX8394 == 1 || CONFIG_PANEL_ILI9488 == 1 || CONFIG_PANEL_ST7703 == 1|| CONFIG_PANEL_ST7701_480x640 == 1)
     .u8VoCnt = 1,
 #else
     .u8VoCnt = 0,
