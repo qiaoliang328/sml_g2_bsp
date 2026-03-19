@@ -5,9 +5,16 @@
 #include "cv184x_default_memmap.dtsi"
 
 / {
+	aliases {
+        serial0 = &uart0;
+        serial1 = &uart1;
+        serial2 = &uart2;
+        serial3 = &uart3;
+    };
+    
 	sysdma_remap {
 		ch-remap = <CVI_I2S0_RX CVI_I2S2_TX CVI_I2S1_RX CVI_I2S1_TX
-			CVI_SPI_NOR_RX CVI_SPI_NOR_TX CVI_I2S2_RX CVI_I2S3_TX>;
+			CVI_SPI_NOR_RX CVI_SPI_NOR_TX CVI_SPI2_RX CVI_SPI2_TX>;
 	};
 	adc-key2 {
 		compatible = "adc-keys";
@@ -112,22 +119,30 @@
 	/delete-node/ i2s@4120000; // i2s2 // 用于数字麦
 	// /detete-node/ spi0@04180000; // spi0
 	// /detete-node/ spi1@04190000; // spi1
-	/delete-node/ spi2@041A0000; // spi2
+	// /delete-node/ spi2@041A0000; // spi2
 	/delete-node/ spi3@041B0000; // spi3
 	/delete-node/ serial@04160000; // uart2
-	/delete-node/ serial@04170000; // uart3
+	// /delete-node/ serial@04170000; // uart3
 	/delete-node/ serial@041C0000; // uart4
 
 	aliases {
 		/delete-property/ ethernet0;
 		/delete-property/ serial2;
-		/delete-property/ serial3;
+		// /delete-property/ serial3;
 		/delete-property/ serial4;
 		/delete-property/ i2c2;
 		/delete-property/ i2c3;
 		/delete-property/ i2c4;
 	};
 };
+
+&spi2 {
+	status = "okay";
+	cs-gpios = <&porte 18 GPIO_ACTIVE_LOW>;
+	spidev0@0 {
+		status = "okay";
+	};
+};	
 
 &i2c0 {
 	status = "okay";
@@ -157,10 +172,8 @@
 	sda-gpios = <&portb 24 GPIO_ACTIVE_HIGH>;
 };
 
-&wifisd{
+&uart3{
 	status = "okay";
 };
 
-&wifi_pin{
-	poweron-gpio = <&porta 19 GPIO_ACTIVE_HIGH>;
-};
+

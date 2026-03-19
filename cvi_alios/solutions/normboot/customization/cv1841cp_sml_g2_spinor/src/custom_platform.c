@@ -261,8 +261,6 @@ void PLATFORM_PowerOff(void)
 
 int PLATFORM_PanelInit(void)
 {
-    u8 rst_port, rst_pin;
-
     // 看门狗或reboot触发的开机，不检测按键，直接继续启动
     if (!_IsRebootOrWatchdogWakeup()) {
         PowerKeyCheck();
@@ -271,6 +269,7 @@ int PLATFORM_PanelInit(void)
 #if (!defined(CONFIG_SUPPORT_VO) || (CONFIG_SUPPORT_VO))
 #if (CONFIG_PANEL_ST7703 == 1 || CONFIG_PANEL_ST7701_480x640 == 1 )
     u8 bl_port = 0, bl_pin = 18;
+    u8 rst_port, rst_pin;
 
     rst_port = 4;
     rst_pin = 3;

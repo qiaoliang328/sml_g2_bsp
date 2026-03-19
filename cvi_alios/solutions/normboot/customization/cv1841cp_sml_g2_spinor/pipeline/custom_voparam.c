@@ -22,6 +22,8 @@
 #define PANEL_WIDTH 480
 #define PANEL_HEIGHT 640
 #define MY_enIntfSync     VO_OUTPUT_480x640_60
+#else
+#define MY_enIntfSync     VO_OUTPUT_480x640_60
 #endif
 
 PARAM_CLASSDEFINE(VO_CHN_ATTR_S,VOCHN,VO,CHN)[] = {
