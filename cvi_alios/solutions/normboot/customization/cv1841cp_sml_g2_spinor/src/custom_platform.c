@@ -195,7 +195,7 @@ static bool _IsRebootOrWatchdogWakeup(void)
 
 // 检测PWR_BUTTON1是否按下
 // 返回: true-按键按下, false-按键未按下
-static bool _IsPowerButtonPressed(void)
+/*static bool _IsPowerButtonPressed(void)
 {
     // PWR_GPIO8 INPUT MODE
     mmio_write_32(0x05021004, mmio_read_32(0x05021004) & 0xFFFFFEFF);
@@ -229,7 +229,7 @@ static void PowerKeyCheck(void)
             mmio_write_32(0x05025008, 0x10001);
         }
     }
-}
+}*/
 
 void PLATFORM_IoInit(void)
 {
@@ -263,7 +263,7 @@ int PLATFORM_PanelInit(void)
 {
     // 看门狗或reboot触发的开机，不检测按键，直接继续启动
     if (!_IsRebootOrWatchdogWakeup()) {
-        PowerKeyCheck();
+      //  PowerKeyCheck();
     }
     _PanelPinmux();
 #if (!defined(CONFIG_SUPPORT_VO) || (CONFIG_SUPPORT_VO))
@@ -281,6 +281,23 @@ int PLATFORM_PanelInit(void)
     udelay(20 * 1000);
     _GPIOSetValue(bl_port, bl_pin, 1);
     printf("panel reset success\n");
+#elif (CONFIG_PANEL_HW_MCU_ST7789V3 == 1 )
+	u8 bl_port = 4, bl_pin = 24;
+    u8 rst_port, rst_pin;
+	u8 power_port = 4, power_pin = 3;
+
+    rst_port = 4;
+    rst_pin = 6;
+    _GPIOSetValue(rst_port, rst_pin, 1);
+    udelay(20 * 1000);
+    _GPIOSetValue(rst_port, rst_pin, 0);
+    udelay(100 * 1000);
+    _GPIOSetValue(rst_port, rst_pin, 1);
+  //  udelay(20 * 1000);
+    _GPIOSetValue(bl_port, bl_pin, 1);
+
+    _GPIOSetValue(power_port, power_pin, 1);
+  //  printf("panel reset st7789!++++\n");
 #endif
 #endif
 

@@ -153,12 +153,12 @@
 	scl-gpios = <&porta 28 GPIO_ACTIVE_HIGH>;
 	sda-gpios = <&porta 29 GPIO_ACTIVE_HIGH>;
 
-	touchscreen@38 {
+	/*touchscreen@38 {
 		compatible = "fts_ts,ft3x07";
 		reg = <0x38>;
 		touch,reset-gpio = <&porta 30 GPIO_ACTIVE_LOW>;
 		touch,irq-gpio = <&porta 14 GPIO_ACTIVE_LOW>;
-	};
+	};*/
 };
 
 &i2c1 {
