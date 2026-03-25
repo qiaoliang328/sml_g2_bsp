@@ -59,7 +59,7 @@
 		};
 	};
 
-	power-key {
+	/*power-key {
 		compatible = "gpio-keys";
 
 		power {
@@ -67,7 +67,7 @@
 			gpios = <&porte 8 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_POWER>;
 		};
-	};
+	};*/
 
 	backlight: backlight {
 		compatible = "pwm-backlight";

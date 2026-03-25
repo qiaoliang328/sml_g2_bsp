@@ -25,6 +25,27 @@ void _GPIOSetValue(u8 gpio_grp, u8 gpio_num, u8 level)
 	csi_gpio_write(&gpio , GPIO_PIN_MASK(gpio_num), level);
 	//printf("test pin end and success.\r\n");
 }
+
+// 把某个GPIO 设置成输入
+void _GPIOSetInput(u8 gpio_grp, u8 gpio_num)
+{
+	csi_error_t ret;
+	csi_gpio_t gpio = {0};
+
+	ret = csi_gpio_init(&gpio, gpio_grp);
+	if(ret != CSI_OK) {
+		printf("csi_gpio_init failed\r\n");
+		return;
+	}
+	// gpio write
+	ret = csi_gpio_dir(&gpio , GPIO_PIN_MASK(gpio_num), GPIO_DIRECTION_INPUT);
+
+	if(ret != CSI_OK) {
+		printf("csi_gpio_dir failed!!\n");
+		return;
+	}
+}
+
 void PLATFORM_SpkMute(int value)
 {
 	static int run_once = 0;
@@ -180,11 +201,35 @@ void JTAG_PinmuxIn()
 void _PanelPinmux(void)
 {
 	// PWR_SEQ1 pinmux unlock
-	printf("PWR_SEQ1 pinmux unlock\n");
+	//printf("PWR_SEQ1 pinmux unlock\n");
 	mmio_write_32(0x05027078, 0x11);
-	PINMUX_CONFIG(PWR_SEQ1, PWR_GPIO_3); // LCD_RST
-        PINMUX_CONFIG(JTAG_CPU_TCK, XGPIOA_18); // LCD_BL
+	/*PINMUX_CONFIG(PWR_WAKEUP0, PWR_GPIO_6); // LCD_RST
+    PINMUX_CONFIG(GPIO_ZQ , PWR_GPIO_24); // LCD_BL
+    PINMUX_CONFIG(PWR_SEQ1 , PWR_GPIO_3); // BOARD_POWER*/
 }
+static void _PanelRegDriverPower( uint32_t reg )
+{
+	uint32_t val;
+	
+	val = mmio_read_32( reg );
+	val |= 0x60;
+	mmio_write_32(reg, val);
+}
+void _PanelGpioDriverPower()
+{
+	_PanelRegDriverPower( 0x03001C50 );
+	_PanelRegDriverPower( 0x03001C54 );
+	_PanelRegDriverPower( 0x03001C58 );
+	_PanelRegDriverPower( 0x03001C5C );
+
+	_PanelRegDriverPower( 0x03001C70 );  
+	_PanelRegDriverPower( 0x03001C74 );  
+	_PanelRegDriverPower( 0x03001C78 );  
+	_PanelRegDriverPower( 0x03001C7C );  
+	_PanelRegDriverPower( 0x03001C80 );  
+	_PanelRegDriverPower( 0x03001C84 ); 
+}
+
 
 // 检测是否是看门狗或reboot触发的开机
 static bool _IsRebootOrWatchdogWakeup(void)
@@ -283,21 +328,23 @@ int PLATFORM_PanelInit(void)
     printf("panel reset success\n");
 #elif (CONFIG_PANEL_HW_MCU_ST7789V3 == 1 )
 	u8 bl_port = 4, bl_pin = 24;
-    u8 rst_port, rst_pin;
-	u8 power_port = 4, power_pin = 3;
+    u8 rst_port = 4, rst_pin = 6;
 
-    rst_port = 4;
-    rst_pin = 6;
+	//_PanelGpioDriverPower();
+
+	PINMUX_CONFIG(PWR_WAKEUP0, PWR_GPIO_6); // LCD_RST
     _GPIOSetValue(rst_port, rst_pin, 1);
     udelay(20 * 1000);
     _GPIOSetValue(rst_port, rst_pin, 0);
     udelay(100 * 1000);
     _GPIOSetValue(rst_port, rst_pin, 1);
-  //  udelay(20 * 1000);
-    _GPIOSetValue(bl_port, bl_pin, 1);
 
-    _GPIOSetValue(power_port, power_pin, 1);
-  //  printf("panel reset st7789!++++\n");
+    PINMUX_CONFIG(GPIO_ZQ , PWR_GPIO_24); // LCD_BL
+    _GPIOSetValue(bl_port, bl_pin, 1);
+	
+/*    PINMUX_CONFIG(PWR_SEQ1 , PWR_GPIO_3); // BOARD_POWER
+	u8 power_port = 4, power_pin = 3;
+    _GPIOSetInput(power_port, power_pin);*/
 #endif
 #endif
 
