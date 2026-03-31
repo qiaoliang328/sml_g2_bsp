@@ -100,21 +100,21 @@ static void _AudioPinmux(void)
 static void _UartPinmux()
 {
     // uart2 pinmux
-    PINMUX_CONFIG(UART2_TX, UART2_TX);
+    PINMUX_CONFIG(UART2_TX, UART2_TX);	// UART2_TX define in   "./cvi_alios/components/chip_cv184x/src/hal/pin/cvi/include/func.h" 
     PINMUX_CONFIG(UART2_RX, UART2_RX);
 
     // uart1 pinmux
-    PINMUX_CONFIG(IIC0_SCL, UART1_TX);
+    PINMUX_CONFIG(IIC0_SCL, UART1_TX);	// UART1_TX define in   "./cvi_alios/components/chip_cv184x/src/hal/pin/cvi/include/func.h" 
     PINMUX_CONFIG(IIC0_SDA, UART1_RX);
 
     // uart0 pinmux
-    // PINMUX_CONFIG(UART0_TX, UART0_TX);
+    // PINMUX_CONFIG(UART0_TX, UART0_TX);	// UART1_TX define in   "./cvi_alios/components/chip_cv184x/src/hal/pin/cvi/include/func.h" 
     // PINMUX_CONFIG(UART0_RX, UART0_RX);
 }
 
 static void _SensorPinmux()
 {
-	//Sensor Pinmux
+/*	//Sensor Pinmux
 #if defined (CONFIG_CHIP_cv1811c) || defined (CONFIG_CHIP_cv1801c) || defined (CONFIG_CHIP_cv1812cp)
 	PINMUX_CONFIG(PAD_MIPI_TXP1, IIC2_SCL);
 	PINMUX_CONFIG(PAD_MIPI_TXM1, IIC2_SDA);
@@ -143,7 +143,7 @@ static void _SensorPinmux()
 #endif
 
 	PINMUX_CONFIG(PAD_MIPIRX0P, CAM_MCLK0);
-#endif
+#endif*/
 }
 
 static void _MipiRxPinmux(void)

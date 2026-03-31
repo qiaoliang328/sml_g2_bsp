@@ -21,8 +21,8 @@ int cvi_board_init(void)
         mmio_write_32(0x03009078, 0x0f00);
         mmio_write_32(0x03009074, 0x606);
         mmio_write_32(0x03009070, 0x606);
-        /* AI_LED default choice */
-        PINMUX_CONFIG(PAD_ETH_RXP, PWM_15);
+        /* AI_LED default choice
+        PINMUX_CONFIG(PAD_ETH_RXP, PWM_15); */
         /* CAM_LED */
         PINMUX_CONFIG(PWR_GPIO0, PWR_GPIO_0);
 
@@ -30,9 +30,10 @@ int cvi_board_init(void)
         PINMUX_CONFIG(PWR_WAKEUP0, PWR_GPIO_6);         /* power source */
         PINMUX_CONFIG(SPK_EN, XGPIOA_15);               /* 4G_RESET_N */
 
-        /* tp */  // ql del for alios debug uart
-        //PINMUX_CONFIG(IIC0_SCL, CV_SCL0__CR_4WTDI);
-        //PINMUX_CONFIG(IIC0_SDA, CV_SDA0__CR_4WTDO);
+        /* IIC0  // ql del for alios debug uart
+        PINMUX_CONFIG(IIC0_SCL, CV_SCL0__CR_4WTDI);
+        PINMUX_CONFIG(IIC0_SDA, CV_SDA0__CR_4WTDO); */
+        
         PINMUX_CONFIG(SD0_PWR_EN, XGPIOA_14);           /* INT */
         PINMUX_CONFIG(AUX0, XGPIOA_30);                 /* RST */
         /* change debug i2c to i2c4, so can use i2c0 */
@@ -41,7 +42,8 @@ int cvi_board_init(void)
         /* sensor */
         PINMUX_CONFIG(PAD_ETH_TXP, IIC1_SCL);
         PINMUX_CONFIG(PAD_ETH_TXM, IIC1_SDA);
-        PINMUX_CONFIG(GPIO_RTX, CAM_MCLK0);
+        //  PINMUX_CONFIG(GPIO_RTX, CAM_MCLK0);  			// demo 板
+        PINMUX_CONFIG(PAD_ETH_RXM, CAM_MCLK0); // x1
 
         /* wifi pin 
         PINMUX_CONFIG(JTAG_CPU_TMS, XGPIOA_19); // WIFI_EN 
@@ -62,3 +64,4 @@ int cvi_board_init(void)
 
         return 0;
 }
+
