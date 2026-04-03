@@ -1,0 +1,36 @@
+From 3923e87b1bd1a93b7a300af183d3db1a88e8ba9e Mon Sep 17 00:00:00 2001
+From: "song.yu" <song.yu@sophgo.com>
+Date: Tue, 10 Mar 2026 14:30:15 +0800
+Subject: [PATCH] feat: spinor support rw rootfs(jffs2)
+
+[description ]:NA
+[root   cause]:NA
+[JIRA      ID]:CV184XSDK-160
+[chip project]:NA
+[side effects]:NA
+[Affected *.ko/*.so/*.a] :NA
+
+Change-Id: I7b8a70628d8bb1b797adc4efafff64d90ad2c13e
+---
+ include/configs/cv184x-asic.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/cv184x-asic.h b/include/configs/cv184x-asic.h
+index cf33fd56c4..c84d810d83 100644
+--- a/include/configs/cv184x-asic.h
++++ b/include/configs/cv184x-asic.h
+@@ -249,7 +249,10 @@
+ 		#endif
+ 	#else
+ 		#ifdef CONFIG_ROOTFS_RW
+-			#error "spi flash is not supporte rootfs rw yet"
++			#define ROOTARGS "rootfstype=jffs2 rootwait rw _a root=" ROOTFS_DEV
++			#ifdef CONFIG_ROOTFS_B
++			#define ROOTARGSB "rootfstype=jffs2 rootwait rw _b root=" ROOTFS_DEV_B
++			#endif
+ 		#else
+ 			#define ROOTARGS "rootfstype=squashfs rootwait ro _a root=" ROOTFS_DEV
+ 			#ifdef CONFIG_ROOTFS_B
+-- 
+2.25.1
+

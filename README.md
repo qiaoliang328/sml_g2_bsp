@@ -41,7 +41,7 @@ git clone "ssh://${whoami}$@172.25.4.9:29418/Projects/Sophcam/sml_g2_bsp"
 mkdir SDK_CV184X && cd SDK_CV184X
 
 # 拉取项目代码
-git clone -b v6.3.2-20251219 git@github.com:Yo-gurts/sophcam_bsp.git sml_g2_bsp
+git clone -b v6.3.2-20251219 git@github.com:qiaoliang328/sml_g2_bsp.git sml_g2_bsp
 ```
 
 **常用命令**
@@ -57,17 +57,32 @@ git clone -b v6.3.2-20251219 git@github.com:Yo-gurts/sophcam_bsp.git sml_g2_bsp
 ./sml_g2_bsp/scripts/sync.sh
 
 # 检查SDK本地提交和远端的差异
-./sml_g2_bsp/scripts/repos --quiet --run lp
+./sml_g2_bsp/scripts/repos --check-env
 
 # 在每个git仓库中执行命令
 ./sml_g2_bsp/scripts/repos --quiet --run git status
 
-# 更新SDK
-./sml_g2_bsp/scripts/repos --bsp --run git fetch
-./sml_g2_bsp/scripts/repos --bsp --run git rebase
-
 # release 代码时记录版本信息
 ./sml_g2_bsp/scripts/repos --run release > sml_g2_bsp/manifest/release/release_sml_g2_20260106.txt
+```
+
+## 升级SDK流程
+
+```
+# 先用旧版 sml_g2_bsp 执行
+./sml_g2_bsp/scripts/repos --reproduce
+./sml_g2_bsp/scripts/repos -r git fetch
+./sml_g2_bsp/scripts/repos -r git rebase
+
+# 更新 sml_g2_bsp 仓库
+cd sml_g2_bsp && git pull
+# 再用新版 sml_g2_bsp 执行
+./sml_g2_bsp/scripts/repos --reproduce
+./sml_g2_bsp/scripts/repos --applypatch
+./sml_g2_bsp/scripts/sync.sh
+
+# 检查同步情况
+./sml_g2_bsp/scripts/repos --check-env
 ```
 
 ## SDK 编译

@@ -1,0 +1,71 @@
+From cabe610d0d926b5949e92a726887b0c9bdb1bc90 Mon Sep 17 00:00:00 2001
+From: "song.yu" <song.yu@sophgo.com>
+Date: Tue, 10 Mar 2026 14:22:26 +0800
+Subject: [PATCH] feat: spinor support rw rootfs(jffs2)
+
+[description ]:NA
+[root   cause]:NA
+[JIRA      ID]:CV184XSDK-160
+[chip project]:NA
+[side effects]:NA
+[Affected *.ko/*.so/*.a] :NA
+
+Change-Id: I61ef34f2a4104a5f79e5dab1bc32dfe5edfb77b1
+---
+ Makefile | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c70c575e..de32a897 100644
+--- a/Makefile
++++ b/Makefile
+@@ -644,6 +644,9 @@ endif
+ $(OUTPUT_DIR)/rawimages:
+ 	${Q}mkdir -p $@
+ 
++define mkjffs2image
++	${Q}python3 $(COMMON_TOOLS_PATH)/image_tool/mkjffs2.py $(COMMON_TOOLS_PATH)/mkfs.jffs2 ${1} ${2} $(OUTPUT_DIR)/rawimages/${3} $(FLASH_PARTITION_XML)
++endef
+ 
+ # Pack_image
+ # Description: Macro for packing image
+@@ -660,9 +663,9 @@ define pack_image
+ 	resize2fs -M $(OUTPUT_DIR)/rawimages/${1}.emmc
+ endef
+ else ifeq (${STORAGE_TYPE},spinor)
+-# TODO:
++# spinor use jffs2
+ define pack_image
+-	$(warning spi nor flash is not support rw filesystem)
++	$(call mkjffs2image,$(strip ${2}),$(if $(filter y,${CONFIG_USE_4K_ERASE_SIZE_FOR_JFFS2}),4096,65536),$(strip ${1}).spinor)
+ endef
+ else
+ define pack_image
+@@ -715,10 +718,6 @@ define raw2cimg_lps
+ 	${Q}python3 $(COMMON_TOOLS_PATH)/image_tool/raw2cimg_lps.py $(OUTPUT_DIR)/rawimages/${1} $(OUTPUT_DIR) $(FLASH_PARTITION_XML)
+ endef
+ 
+-define mkjffs2image
+-	${Q}python3 $(COMMON_TOOLS_PATH)/image_tool/mkjffs2.py $(COMMON_TOOLS_PATH)/mkfs.jffs2 $(OUTPUT_DIR)/data ${1} $(OUTPUT_DIR)/rawimages/${2} $(FLASH_PARTITION_XML)
+-endef
+-
+ menuconfig-br2:
+ 	${Q}$(MAKE) -C ${BUILDROOT_PATH} menuconfig
+ 
+@@ -807,10 +806,10 @@ data:
+ ifeq ($(STORAGE_TYPE),spinor)
+ 	chmod +x $(COMMON_TOOLS_PATH)/mkfs.jffs2
+ ifeq (${CONFIG_USE_4K_ERASE_SIZE_FOR_JFFS2},y)
+-	$(call mkjffs2image ,4096,data.spinor)
++		$(call mkjffs2image,$(OUTPUT_DIR)/data,4096,data.spinor)
+ else
+-	# can not have space before param
+-	$(call mkjffs2image ,65536,data.spinor)
++		# can not have space before param
++		$(call mkjffs2image,$(OUTPUT_DIR)/data,65536,data.spinor)
+ endif
+ else ifeq (${STORAGE_TYPE},spinand)
+ 	$(call pack_image,data,$(OUTPUT_DIR)/data/)
+-- 
+2.25.1
+

@@ -43,17 +43,22 @@ check_sync_status() {
         return 1
     fi
 
-    # 使用diff -r对比目录差异
-    local diff_output
-    diff_output=$(diff -r "$source_path" "$target_path" 2>&1 || true)
+    # 使用rsync dry-run对比目录差异。rsync默认按软链接本身比较，
+    # 不会跟随链接目标，避免因悬空软链接导致误报失败。
+    local check_output
+    if ! check_output=$(rsync -aun --delete --itemize-changes "$source_path/" "$target_path/" 2>&1); then
+        echo -e "${RED}错误: 检查 $description 失败${NC}"
+        echo "$check_output"
+        return 1
+    fi
 
-    if [ -z "$diff_output" ]; then
+    if [ -z "$check_output" ]; then
         echo -e "${GREEN}✅ $description 已经完全同步${NC}"
         return 0
     else
         echo -e "${YELLOW}❌ $description 未完全同步，发现差异:${NC}"
-        # 显示完整的diff输出
-        diff -r "$source_path" "$target_path"
+        # 显示完整的检查输出
+        echo "$check_output"
         return 1
     fi
 }

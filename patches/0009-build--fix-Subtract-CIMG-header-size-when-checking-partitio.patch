@@ -1,0 +1,45 @@
+From 2aa651413650555597eac0752ffbbfb1c3235656 Mon Sep 17 00:00:00 2001
+From: "song.yu" <song.yu@sophgo.com>
+Date: Thu, 2 Apr 2026 18:23:31 +0800
+Subject: [PATCH] fix: Subtract CIMG header size when checking partition size
+
+[description ]:subtract CIMG header size when checking partition size
+[root   cause]:NA
+[JIRA      ID]:CV184XSDK-1134
+[chip project]:CV184X
+[side effects]:NA
+[Affected *.ko/*.so/*.a] :NA
+
+Change-Id: I9d4b281d262f37b63690ba73ddd8162fc27e208e
+---
+ tools/common/image_tool/XmlParser.py | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/tools/common/image_tool/XmlParser.py b/tools/common/image_tool/XmlParser.py
+index a997ef68..284f8722 100644
+--- a/tools/common/image_tool/XmlParser.py
++++ b/tools/common/image_tool/XmlParser.py
+@@ -61,19 +61,12 @@ class XmlParser:
+                     file_size = os.stat(path).st_size
+                 except Exception:
+                     file_size = 0
+-                if file_size > p["part_size"] and part.attrib["label"] != "DATA" :
++                if file_size > (p["part_size"] + 64 * (1 + math.ceil(p["part_size"] / MAX_LOAD_SIZE))) :
+                     logging.error(
+                         "Image: %s(%d) is larger than partition size(%d)"
+                         % (part.attrib["file"], file_size, p["part_size"])
+                     )
+                     raise OverflowError
+-                else :
+-                    if file_size > (p["part_size"] + 64 * (1 + math.ceil(p["part_size"] / MAX_LOAD_SIZE))) :
+-                        logging.error(
+-                            "Image: %s(%d) is larger than partition size(%d)"
+-                            % (part.attrib["file"], file_size, p["part_size"])
+-                        )
+-                        raise OverflowError
+                 p["file_path"] = path
+                 logging.debug("size of " + path + " : " + str(file_size))
+             else:
+-- 
+2.25.1
+
